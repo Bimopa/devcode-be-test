@@ -4,13 +4,8 @@ import express from 'express';
 import morgan from 'morgan';
 import 'dotenv/config';
 
-// const Compression = require('compression');
-// const Cors = require('cors');
-// const express = require('express');
-// const morgan = require('morgan');
-
 const app = express();
-const port = process.env.MYSQL_PORT;
+const port = 3030;
 
 app.use(
   Cors(),

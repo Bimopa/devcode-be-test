@@ -7,9 +7,10 @@ const initModel = require('./init-models');
 
 let db = new Sequelize(process.env.MYSQL_DBNAME, process.env.MYSQL_USER, process.env.MYSQL_PASSWORD, {
   host: process.env.MYSQL_HOST,
+  port: process.env.MYSQL_PORT,
   dialect: 'mysql',
   timezone: '+07:00',
-  logging: true,
+  logging: false,
   pool: {
     max: 100,
   },
