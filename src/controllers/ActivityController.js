@@ -48,7 +48,7 @@ class ActivityController {
 
         const activity = await Activity.create(req.body);
 
-        return res.json(Response.success(activity));
+        return res.status(201).json(Response.success(activity));
       } catch (error) {
           next({error, fun: 'Activity:store'});
       }
@@ -65,7 +65,7 @@ class ActivityController {
         const validate = schema.validate(req.body);
   
         if (validate.error) {
-             res.status(400).json(Response.error("Bad Request", validate.error.message));
+            return res.status(400).json(Response.error("Bad Request", validate.error.message));
         }
 
         let activity = await Activity.findOne({

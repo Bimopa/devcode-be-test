@@ -76,7 +76,7 @@ class TodoController {
           priority: "very-high"
         });
 
-        return res.json(Response.success(todo));
+        return res.status(201).json(Response.success(todo));
       } catch (error) {
           next({error, fun: 'Todo:store'});
       }
@@ -93,7 +93,7 @@ class TodoController {
         const validate = schema.validate(req.body);
   
         if (validate.error) {
-             res.status(400).json(Response.error("Bad Request", validate.error.message));
+            return res.status(400).json(Response.error("Bad Request", validate.error.message));
         }
 
         let todo = await Todo.findOne({
