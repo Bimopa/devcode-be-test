@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --delay 500ms --exec babel-node ./src/app.js"
+    "start": "npx seqelize db:create && npx sequelize db:migrate && nodemon --delay 500ms --exec babel-node ./src/app.js"
   },
   "author": "",
   "license": "ISC",
