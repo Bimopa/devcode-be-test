@@ -18,7 +18,7 @@ class TodoController {
 
         const todo = await Todo.findAll(query);
         
-        if(todo.length < 0) {
+        if(todo.length < 1) {
           return res.send(Response.error("Not Found", "Todo with ID "+ req.query.activity_group_id +" Not Found"))
         }
 
