@@ -75,7 +75,7 @@ const migrationCommands = transaction => [
           allowNull: false
         },
         is_active: {
-          type: Sequelize.BOOLEAN,
+          type: Sequelize.INTEGER,
           field: 'is_active',
           default: true,
           allowNull: false,

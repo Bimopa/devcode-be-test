@@ -73,7 +73,7 @@ class TodoController {
 
         const todo = await Todo.create({
           ...req.body,
-          is_active: true,
+          is_active: 1,
           priority: "very-high"
         });
 
@@ -108,8 +108,14 @@ class TodoController {
         if (!todo) {
           return res.status(404).json(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
         }
-  
-        let result = await todo.update(req.body);
+
+        let result
+        if(req.body.is_active == true)
+        {
+        result = await todo.update({...req.body, is_active:0});
+        } else {
+        result = await todo.update({...req.body, is_active:1});
+        }
 
         return res.json(Response.success(result));
       } catch (error) {
