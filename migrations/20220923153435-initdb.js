@@ -10,7 +10,7 @@ const migrationCommands = transaction => [
   {
     fn: 'createTable',
     params: [
-      'Activity',
+      'activities',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -29,20 +29,20 @@ const migrationCommands = transaction => [
           field: 'title', 
           allowNull: false
         },
-        createdAt: {
+        created_t: {
           type: Sequelize.DATE,
-          field: 'createdAt',
+          field: 'created_at',
           allowNull: true,
           defaultValue: Sequelize.fn('NOW'),
         },
-        updatedAt: {
+        updated_at: {
           type: Sequelize.DATE,
-          field: 'updatedAt',
+          field: 'updated_at',
           allowNull: true,
         },
-        deletedAt: {
+        deleted_at: {
           type: Sequelize.DATE,
-          field: 'deletedAt',
+          field: 'deleted_at',
           allowNull: true,
         },
       },
@@ -52,7 +52,7 @@ const migrationCommands = transaction => [
   {
     fn: 'createTable',
     params: [
-      'Todo',
+      'todos',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -66,7 +66,7 @@ const migrationCommands = transaction => [
           onUpdate: 'CASCADE',
           onDelete: 'RESTRICT',
           field: 'activity_group_id',
-          references: {model: 'Activity', key: 'id'},
+          references: {model: 'activities', key: 'id'},
           allowNull: false,
         },
         title: {
@@ -85,26 +85,40 @@ const migrationCommands = transaction => [
           field: 'priority',
           allowNull: false,
         },
-        createdAt: {
+        created_at: {
           type: Sequelize.DATE,
-          field: 'createdAt',
+          field: 'created_at',
           allowNull: true,
           defaultValue: Sequelize.fn('NOW'),
         },
-        updatedAt: {
+        updated_at: {
           type: Sequelize.DATE,
-          field: 'updatedAt',
+          field: 'updated_at',
           allowNull: true,
         },
-        deletedAt: {
+        deleted_at: {
           type: Sequelize.DATE,
-          field: 'deletedAt',
+          field: 'deleted_at',
           allowNull: true,
         },
       },
       {transaction},
     ],
   },
+
+    //index
+    {
+      fn: 'addIndex',
+      params: [
+        'todos',
+        [{name: 'activity_group_id'}],
+        {
+          indexName: 'activity_group_id',
+          name: 'activity_group_id',
+          transaction,
+        },
+      ],
+    },
 ]
 const rollbackCommands = transaction => [];
 

@@ -18,12 +18,12 @@ class TodoController {
 
         const todo = await Todo.findAll(query);
         
-        if(todo.length < 1) {
+        if(!todo) {
           return res.send(Response.error("Not Found", "Todo with ID "+ req.query.activity_group_id +" Not Found"))
         }
 
         return res.send(Response.success(todo));
-      } catch (error) {
+      } catch (error) { 
         next({error, fun: 'Customer:index'});
       }
     }
@@ -33,12 +33,13 @@ class TodoController {
         const id = req.params.id
         const todo = await Todo.findOne({
           where: {
-            id: id
+            id: id,
+            deleted_at: null
           }
         })
 
         if(!todo) {
-          return res.send(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
         }
  
         return res.send(Response.success(todo));
@@ -67,7 +68,7 @@ class TodoController {
         })
 
         if(!activ) {
-          return res.send(Response.error("Not Found", "Todo with ID "+ parseInt(req.body.activity_group_id) +" Not Found"))
+          return res.status(400).json(Response.error("Not Found", "Todo with ID "+ parseInt(req.body.activity_group_id) +" Not Found"))
         }
 
         const todo = await Todo.create({
@@ -86,24 +87,26 @@ class TodoController {
       try {
         const id = parseInt(req.params.id)
         const schema = Joi.object().keys({
-          activity_group_id: Joi.number().required().messages({"string.empty":"activity_group_id cannot be null", "any.required":"activity_group_id cannot be null"}),
-          title: Joi.string().required().messages({"string.empty":"title cannot be null", "any.required":"title cannot be null"}),
+          activity_group_id: Joi.number().optional().messages({"string.empty":"activity_group_id cannot be null", "any.required":"activity_group_id cannot be null"}),
+          title: Joi.string().optional().messages({"string.empty":"title cannot be null", "any.required":"title cannot be null"}),
+          is_active: Joi.boolean().optional()
         });
   
         const validate = schema.validate(req.body);
   
         if (validate.error) {
-            return res.status(400).json(Response.error("Bad Request", validate.error.message));
+            return res.status(404).json(Response.error("Bad Request", validate.error.message));
         }
 
         let todo = await Todo.findOne({
             where: {
-                id: id
+                id: id,
+                deleted_at: null
             }
         })
 
         if (!todo) {
-          return res.send(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
         }
   
         let result = await todo.update(req.body);
@@ -124,7 +127,7 @@ class TodoController {
         });
   
         if (!todo) {
-          return res.send(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Todo with ID "+ id +" Not Found"))
         }
   
         await todo.destroy();

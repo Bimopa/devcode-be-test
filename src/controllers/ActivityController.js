@@ -8,9 +8,9 @@ class ActivityController {
       try {
         const activity = await Activity.findAll()
         
-        return res.send(Response.success(activity));
+        return res.status(200).json(Response.success(activity));
       } catch (error) {
-        next({error, fun: 'Customer:index'});
+        next({error, fun: 'Activity:index'});
       }
     }
 
@@ -19,17 +19,18 @@ class ActivityController {
         const id = req.params.id
         const activity = await Activity.findOne({
           where: {
-            id: id
+            id: id,
+            deleted_at: null
           }
         })
 
         if(!activity) {
-          return res.send(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
         }
  
         return res.send(Response.success(activity));
       } catch (error) {
-        next({error, fun: 'Customer:index'});
+        next({error, fun: 'Activity:index'});
       }
     }
   
@@ -58,31 +59,32 @@ class ActivityController {
       try {
         const id = req.params.id
         const schema = Joi.object().keys({
-          email: Joi.string().required().messages({"string.empty":"email cannot be null", "any.required":"email cannot be null"}),
-          title: Joi.string().required().messages({"string.empty":"title cannot be null", "any.required":"title cannot be null"}),
+          email: Joi.string().optional().messages({"string.empty":"email cannot be null", "any.required":"email cannot be null"}),
+          title: Joi.string().optional().messages({"string.empty":"title cannot be null", "any.required":"title cannot be null"}),
         });
   
         const validate = schema.validate(req.body);
   
         if (validate.error) {
-            return res.status(400).json(Response.error("Bad Request", validate.error.message));
+            return res.status(404).json(Response.error("Bad Request", validate.error.message));
         }
 
         let activity = await Activity.findOne({
             where: {
-                id: id
+                id: id,
+                deleted_at: null
             }
         })
 
         if (!activity) {
-          return res.send(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
         }
   
         let result = await activity.update(req.body);
 
         return res.json(Response.success(result));
       } catch (error) {
-          next({error, fun: 'Teting:update'});
+          next({error, fun: 'Activity:update'});
       }
     }
   
@@ -96,7 +98,7 @@ class ActivityController {
         });
   
         if (!activity) {
-          return res.send(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
+          return res.status(404).json(Response.error("Not Found", "Activity with ID "+ id +" Not Found"))
         }
   
         await activity.destroy();

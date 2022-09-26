@@ -18,13 +18,13 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: ""
-      },
+      }
     },
     {
       sequelize,
-      tableName: 'Activity',
-      timestamps: true,
-      paranoid: true
+      tableName: 'activities',
+      paranoid: true,
+      underscored: true
     },
   );
 };

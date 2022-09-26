@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    'Todo ',
+    'Todo',
     {
       id: {
         autoIncrement: true,
@@ -14,7 +14,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         references: {
           model: {
-            tableName: 'Activity',
+            tableName: 'activities',
           },
           key: 'id',
         }
@@ -33,13 +33,13 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.ENUM('low', 'high', 'very-high'),
         allowNull: false,
         defaultValue: ""
-      },
+      }
     },
     {
       sequelize,
-      tableName: 'Todo',
-      timestamps: true,
-      paranoid: true,
+      tableName: 'todos',
+      paranoid:true,
+      underscored: true,
       indexes: [
         {
           name: 'Todo_activityGroupId_foreign',
